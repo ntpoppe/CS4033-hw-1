@@ -1,8 +1,10 @@
+from romania import romania_adj_list
+
 # created this to mimic the pseudo-code from the book
 # `main.py` has example of how it is used
 class Problem():
-    def __init__(self, graph, initial_state, goal):
-        self.graph = graph # this should always be the romania adj. list
+    def __init__(self, initial_state, goal):
+        self.graph = romania_adj_list # this should always be the romania adj. list
         self.initial_state = initial_state
         self.goal = goal
 

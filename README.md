@@ -1,10 +1,15 @@
 ### CS4033 - Homework 1
+- Run `main.py` to see the algorithims run.
 - The majority of the assignment has been split into different files.
-- I attempted to follow the pseudo-code given by the textbook for the algorithms, hence the `Problem` class (`problem.py`). This class was used to determine the start and goal with helper functions.
-- The Romania adjacency list is in `romania.py`. The SLD heuristic given by the textbook is in `heuristics.py`. I planned to have the other two heuristics implemented in the same file.
+- I attempted to follow the pseudo-code given by the textbook for the algorithms, hence the `Problem` class (`problem.py`). This class was used to determine the start and goal with helper functions (total path cost for example)
+- The Romania adjacency list is in `romania.py`. The SLD heuristic given by the textbook is in `heuristics.py`. I planned to have the other two heuristics implemented in the same file but, do what you wish.
 - Each search function is in it's own file as well:
     - `a_star.py`: A*
     - `bfs.py`: Breadth-First Search 
     - `dfs.py`: Depth-First Search
     - `greedy.py`: Greedy Best-First Search
+- For "Implementation Details" section of "Report and Analysis" on the homework document, all 4 of these algorithms were implementation based off of the pseudocode the book provided. Other sources I used:
+    - https://cs.stanford.edu/people/abisee/gs.pdf
+    - https://www.geeksforgeeks.org/dsa/a-search-algorithm/
+    - https://www.geeksforgeeks.org/dsa/greedy-best-first-search-algorithm/
 - Each of these are imported into `main.py` to easily test. It holds examples of how to run each algorithm for different problems.
