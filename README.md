@@ -1,5 +1,5 @@
 ### CS4033 - Homework 1
-- Run `main.py` to see the algorithims run.
+- Run `main.py` to see the algorithms run.
 - The majority of the assignment has been split into different files.
 - I attempted to follow the pseudo-code given by the textbook for the algorithms, hence the `Problem` class (`problem.py`). This class was used to determine the start and goal with helper functions (total path cost for example)
 - The Romania adjacency list is in `romania.py`. The SLD heuristic given by the textbook is in `heuristics.py`. I planned to have the other two heuristics implemented in the same file but, do what you wish.
