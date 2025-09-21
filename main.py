@@ -1,5 +1,6 @@
 from textbook_objects.problem import Problem
 from textbook_objects.heuristics import *
+from textbook_objects.romania import romania_adj_list
 from algorithms.bfs import bfs
 from algorithms.dfs import dfs
 from algorithms.greedy import greedy_best_first
