@@ -1,3 +1,5 @@
+import time
+from statistics import mean
 from textbook_objects.problem import Problem
 from textbook_objects.heuristics import *
 from textbook_objects.romania import romania_adj_list
@@ -5,6 +7,24 @@ from algorithms.bfs import bfs
 from algorithms.dfs import dfs
 from algorithms.greedy import greedy_best_first
 from algorithms.a_star import astar
+from utils.counter import Counter
+
+# runs an algorithm "repeats" times. returns an average nodes expandeed and average completion time.
+def time_runs(fn, *args, repeats=100000, **kwargs):
+    expanded_counts, times_ms = [], []
+    last_path = None
+    for _ in range(repeats):
+        ctr = Counter()
+        start_time = time.perf_counter()
+        last_path = fn(*args, counter=ctr, **kwargs)
+        delta_t = (time.perf_counter() - start_time) * 1000.0 # milliseconds
+        expanded_counts.append(ctr.expanded)
+        times_ms.append(delta_t)
+    return {
+        "path": last_path,
+        "avg_expanded": int(round(mean(expanded_counts))),
+        "avg_time_ms": round(mean(times_ms), 3),
+    }
 
 # testing the problems/algorithms should happen here
 def main():

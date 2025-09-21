@@ -1,5 +1,6 @@
 import heapq
 from textbook_objects.problem import Problem
+from utils.counter import Counter
 
 class Node:
     def __init__(self, state, parent=None, h=0):
@@ -21,7 +22,7 @@ class Node:
     def __lt__(self, other):
         return self.h < other.h
 
-def greedy_best_first(problem: Problem, heuristic: dict) -> list:
+def greedy_best_first(problem: Problem, heuristic: dict, counter: Counter) -> list:
     start = problem.initial_state
     root = Node(start, None, heuristic[start])
 
@@ -39,6 +40,7 @@ def greedy_best_first(problem: Problem, heuristic: dict) -> list:
     while fringe:
         # pop node with smallest heuristic value
         node = heapq.heappop(fringe)
+        counter.expanded += 1
 
         # goal check
         if problem.goal_test(node.state):

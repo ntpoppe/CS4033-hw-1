@@ -1,5 +1,6 @@
 from heapq import heappush, heappop
 from textbook_objects.problem import Problem
+from utils.counter import Counter
 
 class Node:
     def __init__(self, state, parent=None, g=0, h=0):
@@ -28,7 +29,7 @@ class Node:
             return self.g < other.g
         return self.f() < other.f()
 
-def astar(problem: Problem, heuristic) -> list:
+def astar(problem: Problem, heuristic: dict, counter: Counter) -> list:
     start = problem.initial_state
     root = Node(start, None, 0, heuristic[start])
 
@@ -53,6 +54,8 @@ def astar(problem: Problem, heuristic) -> list:
         # if this entry is worse than the best known path, skip it
         if node.g != best_g.get(node.state, None):
             continue
+
+        counter.expanded += 1
 
         # if node is goal, reconstruct path from start → goal
         if problem.goal_test(node.state):
