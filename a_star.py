@@ -1,3 +1,4 @@
+from heapq import heappush, heappop
 from problem import Problem
 
 class Node:
@@ -18,65 +19,52 @@ class Node:
             node = node.parent
         return list(reversed(result))
 
-class PriorityQueue:
-    def __init__(self):
-        self._q = []
-
-    def push(self, priority, item):
-        self._q.append((priority, item))
-        self._q.sort(key=lambda x: x[0]) # keep lowest priority first
-
-    def pop(self):
-        if not self._q:
-            return None
-        return self._q.pop(0)[1]
-
-    def find_index_by_state(self, state):
-        for i, (_, n) in enumerate(self._q):
-            if n.state == state:
-                return i
-        return -1
-
-    def priority_at(self, idx):
-        return self._q[idx][0]
-
-    def replace_at(self, idx, priority, item):
-        self._q[idx] = (priority, item)
-        self._q.sort(key=lambda x: x[0])
-
 def astar(problem: Problem, heuristic) -> list:
-    h0 = heuristic[problem.initial_state]
-    root = Node(problem.initial_state, parent=None, g=0, h=h0)
-    if problem.goal_test(root.state):
+    start = problem.initial_state
+    root = Node(start, None, 0, heuristic[start])
+
+    # if start is already the goal, return immediately
+    if problem.goal_test(start):
         return root.path()
 
-    fringe = PriorityQueue() # ordered by f = g + h
-    fringe.push(root.f(), root)
-    explored = {root.state}
+    # frontier (min-heap, priority queue) of nodes to explore, ordered by f = g + h
+    # each entry: (f-value, g-value, Node)
+    fringe = []
+    heappush(fringe, (root.f(), root.g, root))
 
+    # best_g maps each state to the lowest g-value (cost so far) found for it
+    # ensures we only expand the cheapest known path to any state
+    best_g = {start: 0}
+
+    # expand until frontier is empty or goal is found
     while fringe:
-        node = fringe.pop()
+        # pop node with smallest f-value
+        _, g_seen, node = heappop(fringe)
+
+        # if this entry is worse than the best known path, skip it
+        if g_seen != best_g.get(node.state, None):
+            continue
+
+        # if node is goal, reconstruct path from start → goal
         if problem.goal_test(node.state):
             return node.path()
 
-        # expand
-        for neighbor in problem.actions(node.state):
-            if neighbor in explored:
-                continue
-
-            # build child node with updated path cost g, heuristic h, and total f
-            step = problem.step_cost(node.state, neighbor)
+        # expand: generate all successor states
+        for nbr in problem.actions(node.state):
+            # compute path cost to neighbor
+            step = problem.step_cost(node.state, nbr)
             g_child = node.g + step
-            h_child = heuristic[neighbor]
-            child = Node(neighbor, parent=node, g=g_child, h=h_child)
-            f_child = child.f()
 
-            # if neighbor is already in frontier with higher f, replace it, else insert
-            idx = fringe.find_index_by_state(neighbor)
-            if idx == -1:
-                fringe.push(f_child, child)
-            else:
-                if f_child < fringe.priority_at(idx):
-                    fringe.replace_at(idx, f_child, child)
+            # if this path is cheaper than any seen before for neighbor
+            if g_child < best_g.get(nbr, float("inf")):
+                best_g[nbr] = g_child # record improved cost
 
-    return [] # no path
+                # compute heuristic for neighbor
+                h_child = heuristic[nbr]
+
+                # build child node and push into frontier with new f
+                child = Node(nbr, node, g_child, h_child)
+                heappush(fringe, (child.f(), g_child, child))
+
+    # if no path found, return empty list
+    return []

@@ -1,3 +1,4 @@
+from collections import deque
 from problem import Problem
 
 class Node:
@@ -19,12 +20,11 @@ def bfs(problem: Problem) -> list:
     if problem.goal_test(root.state):
         return root.path() # if the goal is the start for some reason, return that "path"
 
-    fringe = [root] # initializes queue with root node
+    fringe = deque([root]) # initializes queue with root node
     explored = {root.state} # initializes explored set with root state
 
     while fringe:
-        node = fringe.pop(0) # take from front
-        explored.add(node.state)
+        node = fringe.popleft() # take from front
 
         for neighbor in problem.actions(node.state):
             if neighbor not in explored:

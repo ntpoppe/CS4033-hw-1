@@ -9,7 +9,10 @@
     - `dfs.py`: Depth-First Search
     - `greedy.py`: Greedy Best-First Search
 - For "Implementation Details" section of "Report and Analysis" on the homework document, all 4 of these algorithms were implementation based off of the pseudocode the book provided. Other sources I used:
+    - the book (chapter 3 specifically)
     - https://cs.stanford.edu/people/abisee/gs.pdf
     - https://www.geeksforgeeks.org/dsa/a-search-algorithm/
     - https://www.geeksforgeeks.org/dsa/greedy-best-first-search-algorithm/
+    - https://www.geeksforgeeks.org/python/heap-queue-or-heapq-in-python/
+    - https://docs.python.org/3/library/heapq.html
 - Each of these are imported into `main.py` to easily test. It holds examples of how to run each algorithm for different problems.
