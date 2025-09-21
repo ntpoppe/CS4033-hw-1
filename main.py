@@ -62,5 +62,19 @@ def main():
     print("Greedy (triangle):", time_runs(greedy_best_first, problem3, heuristic1_v2))
     print("A* (triangle):", time_runs(astar, problem3, heuristic1_v2))
 
+    print("\nProblem 2: Arad to Oradea")
+    heuristic2_v1 = heuristic2(problem2.goal, romania_adj_list)
+    print("BFS:", time_runs(bfs, problem2))
+    print("DFS:", time_runs(dfs, problem2))
+    print("Greedy (triangle):", time_runs(greedy_best_first, problem2, heuristic2_v1))
+    print("A* (triangle-avg):", time_runs(astar, problem2, heuristic2_v1))
+
+    print("\nProblem 3: Zerind to Bucharest") 
+    heuristic2_v2 = heuristic2(problem3.goal, romania_adj_list)
+    print("BFS:", time_runs(bfs, problem3))
+    print("DFS:", time_runs(dfs, problem3))
+    print("Greedy (triangle h2):", time_runs(greedy_best_first, problem3, heuristic2_v2))
+    print("A* (triangle h2):", time_runs(astar, problem3, heuristic2_v2))
+
 if __name__ == "__main__":
     main()
