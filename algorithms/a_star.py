@@ -1,5 +1,5 @@
 from heapq import heappush, heappop
-from problem import Problem
+from textbook_objects.problem import Problem
 
 class Node:
     def __init__(self, state, parent=None, g=0, h=0):
