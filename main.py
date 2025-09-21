@@ -1,3 +1,6 @@
+import time
+from typing import Callable
+from statistics import mean
 from textbook_objects.problem import Problem
 from textbook_objects.heuristics import *
 from textbook_objects.romania import romania_adj_list
@@ -5,47 +8,59 @@ from algorithms.bfs import bfs
 from algorithms.dfs import dfs
 from algorithms.greedy import greedy_best_first
 from algorithms.a_star import astar
+from utils.counter import Counter
 
-# testing the problems/algorithms should happen here
+# Runs an algorithm "repeats" times. The results (path) will 
+# always be the same, so the repeats are just for a time comparison to other algorithms.
+# Returns the last path, the last path cost, average expanded, and the total time to run n tests.
+def time_runs(algorithm: Callable, *args):
+    expanded_counts = []
+    last_path = None
+
+    # args[0] should always be a problem
+    problem: Problem = args[0]
+
+    start_time = time.time()
+    for _ in range(100000):
+        counter = Counter()
+        last_path = algorithm(*args, counter=counter)
+        expanded_counts.append(counter.expanded)
+    total_time_ms = (time.time() - start_time) * 1000.0  # total in ms
+
+    return {
+        "path": last_path,
+        "path_count": len(last_path),
+        "path_cost": problem.path_cost(last_path),
+        "avg_expanded": float(round(mean(expanded_counts))),
+        "total_time_ms": round(total_time_ms, 3),
+    }
+
 def main():
     problem1 = Problem(initial_state="Arad", goal="Bucharest")
     problem2 = Problem("Arad", "Oradea")
     problem3 = Problem("Zerind", "Bucharest")
 
-    bfs1_path = bfs(problem1)
-    dfs1_path = dfs(problem1)
-    greedy1_path = greedy_best_first(problem1, hSLD_bucharest)
-    astar1_path = astar(problem1, hSLD_bucharest)
+    print("\nEfficiency Tests\n")
 
-    bfs2_path = bfs(problem2)
-    dfs2_path = dfs(problem2)
-    heuristic1_h_value2 = heuristic1(problem2.goal, romania_adj_list)
-    greedy2_path = greedy_best_first(problem2, heuristic1_h_value2)
-    astar2_path = astar(problem2, heuristic1_h_value2)
+    print("Problem 1: Arad to Bucharest")
+    print("BFS:", time_runs(bfs, problem1))
+    print("DFS:", time_runs(dfs, problem1))
+    print("Greedy:", time_runs(greedy_best_first, problem1, hSLD_bucharest))
+    print("A*:", time_runs(astar, problem1, hSLD_bucharest))
 
-    bfs3_path = bfs(problem3)
-    dfs3_path = dfs(problem3)
-    heuristic1_h_value3 = heuristic1(problem3.goal, romania_adj_list)
-    greedy3_path = greedy_best_first(problem3, heuristic1_h_value3)
-    astar3_path = astar(problem3, heuristic1_h_value3)
+    print("\nProblem 2: Arad to Oradea") 
+    heuristic1_v1 = heuristic1(problem2.goal, romania_adj_list)
+    print("BFS:", time_runs(bfs, problem2))
+    print("DFS:", time_runs(dfs, problem2))
+    print("Greedy (triangle):", time_runs(greedy_best_first, problem2, heuristic1_v1))
+    print("A* (triangle):", time_runs(astar, problem2, heuristic1_v1))
 
-    print("\n--- Problem 1 ---\n")
-    print(f"problem1 - BFS: {bfs1_path} - path cost: {problem1.path_cost(bfs1_path)}")
-    print(f"problem1 - DFS: {dfs1_path} - path cost: {problem1.path_cost(dfs1_path)}")
-    print(f"problem1 - greedy: {greedy1_path} - path cost: {problem1.path_cost(greedy1_path)}")
-    print(f"problem1 - a*: {astar1_path} - path cost: {problem1.path_cost(astar1_path)}")
-
-    print("\n--- Problem 2 ---\n")
-    print(f"problem2 - BFS: {bfs2_path} - path cost: {problem2.path_cost(bfs2_path)}")
-    print(f"problem2 - DFS: {dfs2_path} - path cost: {problem2.path_cost(dfs2_path)}")
-    print(f"problem2 - greedy (triangle): {greedy2_path} - path cost: {problem2.path_cost(greedy2_path)}")
-    print(f"problem2 - a* (triangle): {astar2_path} - path cost: {problem2.path_cost(astar2_path)}")
-
-    print("\n--- Problem 3 ---\n")
-    print(f"problem3 - BFS: {bfs3_path} - path cost: {problem3.path_cost(bfs3_path)}")
-    print(f"problem3 - DFS: {dfs3_path} - path cost: {problem3.path_cost(dfs3_path)}")
-    print(f"problem3 - greedy (triangle): {greedy3_path} - path cost: {problem3.path_cost(greedy3_path)}")
-    print(f"problem3 - a* (triangle): {astar3_path} - path cost: {problem3.path_cost(astar3_path)}")
+    print("\nProblem 3: Zerind to Bucharest") 
+    heuristic1_v2 = heuristic1(problem3.goal, romania_adj_list)
+    print("BFS:", time_runs(bfs, problem3))
+    print("DFS:", time_runs(dfs, problem3))
+    print("Greedy (triangle):", time_runs(greedy_best_first, problem3, heuristic1_v2))
+    print("A* (triangle):", time_runs(astar, problem3, heuristic1_v2))
 
 if __name__ == "__main__":
     main()
