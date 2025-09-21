@@ -19,6 +19,15 @@ class Node:
             node = node.parent
         return list(reversed(result))
 
+    # heappush needs something to compare on, so we can have node implement that.
+    # this implements the comparison of two nodes by "less than".
+    # lower f value == higher priority
+    def __lt__(self, other):
+        # compare nodes by f-value, break ties with g
+        if self.f() == other.f():
+            return self.g < other.g
+        return self.f() < other.f()
+
 def astar(problem: Problem, heuristic) -> list:
     start = problem.initial_state
     root = Node(start, None, 0, heuristic[start])
@@ -28,9 +37,9 @@ def astar(problem: Problem, heuristic) -> list:
         return root.path()
 
     # frontier (min-heap, priority queue) of nodes to explore, ordered by f = g + h
-    # each entry: (f-value, g-value, Node)
+    # each entry is a node
     fringe = []
-    heappush(fringe, (root.f(), root.g, root))
+    heappush(fringe, root)
 
     # best_g maps each state to the lowest g-value (cost so far) found for it
     # ensures we only expand the cheapest known path to any state
@@ -39,10 +48,10 @@ def astar(problem: Problem, heuristic) -> list:
     # expand until frontier is empty or goal is found
     while fringe:
         # pop node with smallest f-value
-        _, g_seen, node = heappop(fringe)
+        node = heappop(fringe)
 
         # if this entry is worse than the best known path, skip it
-        if g_seen != best_g.get(node.state, None):
+        if node.g != best_g.get(node.state, None):
             continue
 
         # if node is goal, reconstruct path from start → goal
@@ -64,7 +73,7 @@ def astar(problem: Problem, heuristic) -> list:
 
                 # build child node and push into frontier with new f
                 child = Node(nbr, node, g_child, h_child)
-                heappush(fringe, (child.f(), g_child, child))
+                heappush(fringe, child)
 
     # if no path found, return empty list
     return []
