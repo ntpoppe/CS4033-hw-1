@@ -20,7 +20,3 @@ class Problem():
     # returns cost (distance) of entire path
     def path_cost(self, path):
         return sum(self.step_cost(path[i], path[i+1]) for i in range(len(path)-1))
-
-    
-
-        
