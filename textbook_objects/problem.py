@@ -1,4 +1,4 @@
-from romania import romania_adj_list
+from textbook_objects.romania import romania_adj_list
 
 # created this to mimic the pseudo-code from the book
 # `main.py` has example of how it is used

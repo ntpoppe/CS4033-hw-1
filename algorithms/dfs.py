@@ -1,4 +1,5 @@
-from problem import Problem
+from collections import deque
+from textbook_objects.problem import Problem
 
 class Node:
     def __init__(self, state, parent=None):
@@ -14,17 +15,16 @@ class Node:
             node = node.parent
         return list(reversed(result))
 
-def bfs(problem: Problem) -> list:
+def dfs(problem: Problem) -> list:
     root = Node(problem.initial_state)
     if problem.goal_test(root.state):
         return root.path() # if the goal is the start for some reason, return that "path"
 
-    fringe = [root] # initializes queue with root node
+    fringe = deque([root]) # initializes "queue" with root node
     explored = {root.state} # initializes explored set with root state
 
     while fringe:
-        node = fringe.pop(0) # take from front
-        explored.add(node.state)
+        node = fringe.pop() # take from back
 
         for neighbor in problem.actions(node.state):
             if neighbor not in explored:

@@ -1,11 +1,9 @@
-from problem import Problem
-from heuristics import hSLD_bucharest
-from bfs import bfs
-from dfs import dfs
-from greedy import greedy_best_first
-from a_star import astar
-from heuristics import *
-from romania import romania_adj_list
+from textbook_objects.problem import Problem
+from textbook_objects.heuristics import *
+from algorithms.bfs import bfs
+from algorithms.dfs import dfs
+from algorithms.greedy import greedy_best_first
+from algorithms.a_star import astar
 
 # testing the problems/algorithms should happen here
 def main():
