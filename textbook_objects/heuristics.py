@@ -43,33 +43,18 @@ def heuristic1(goal, romania_adj_list):
     return h
 
 def heuristic2(goal, romania_adj_list):
-    cities_list = romania_adj_list.keys()
-    h = {}
-
-    for city in cities_list:
-        if city == goal:
-            h[city] = 0 #the heuristic for the goal is always 0
-        else:
-            neighbors = romania_adj_list[city]
-            estimates = []
-            for neighbor, dist in neighbors.items(): 
-                neighbor_est = 0 if neighbor == goal else hSLD_bucharest.get(neighbor, 999) #if neighbor is the goal use edge distanc, else use SLD
-                estimates.append(dist + neighbor_est)
-                #choose the smallest estimate
-            h[city] = min(estimates) if estimates else 9999 #if there are no neighbors use fallback num
-    return h
-
-def heuristic2(goal, romania_adj_list):
     # find the smallest edge in the graph
     min_edge = min(distance for city in romania_adj_list for distance in romania_adj_list[city].values())
     
     # compute min numner of hops from every city to the goal
     hop_distance = {city: float("inf") for city in romania_adj_list}
-    hop_distance[goal] = 0
+    hop_distance[goal] = 0 # distance from goal to itself is 0
     queue = deque([goal])
     #using BFS to compute
     while queue:
         city = queue.popleft()
+
+        # look at all neighbors of the current city
         for neighbor in romania_adj_list[city]:
             if hop_distance[neighbor] == float("inf"):#if city hasn't been visited yet set the hop distance to current city+1
                 hop_distance[neighbor] = hop_distance[city] + 1
