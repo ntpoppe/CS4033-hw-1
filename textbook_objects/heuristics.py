@@ -19,7 +19,7 @@ def heuristic1(goal, romania_adj_list):
     cities_list = romania_adj_list.keys()
     h ={}
     # all the distances will be set to infinity initially because according to the lab document, 
-    # we use infinity to represent a very lage value when we don't know the exact distance
+    # we use infinity to represent a very large value when we don't know the exact distance
     for city in cities_list:
         h[city] = math.inf
     h[goal] = 0
@@ -41,6 +41,7 @@ def heuristic1(goal, romania_adj_list):
                 h[city] = h[neighbor] + distance
                 distance_changed = True
     return h
+
 def heuristic2(goal, romania_adj_list):
     cities_list = romania_adj_list.keys()
     h = {}

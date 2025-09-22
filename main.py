@@ -38,7 +38,7 @@ def time_runs(algorithm: Callable, *args):
 def main():
     problem1 = Problem(initial_state="Arad", goal="Bucharest")
     problem2 = Problem("Arad", "Oradea")
-    problem3 = Problem("Zerind", "Bucharest")
+    problem3 = Problem("Zerind", "Pitesti")
 
     print("\nEfficiency Tests\n")
 
@@ -50,31 +50,25 @@ def main():
 
     print("\nProblem 2: Arad to Oradea") 
     heuristic1_v1 = heuristic1(problem2.goal, romania_adj_list)
-    print("BFS:", time_runs(bfs, problem2))
-    print("DFS:", time_runs(dfs, problem2))
-    print("Greedy (triangle):", time_runs(greedy_best_first, problem2, heuristic1_v1))
-    print("A* (triangle):", time_runs(astar, problem2, heuristic1_v1))
-
-    print("\nProblem 3: Zerind to Bucharest") 
-    heuristic1_v2 = heuristic1(problem3.goal, romania_adj_list)
-    print("BFS:", time_runs(bfs, problem3))
-    print("DFS:", time_runs(dfs, problem3))
-    print("Greedy (triangle):", time_runs(greedy_best_first, problem3, heuristic1_v2))
-    print("A* (triangle):", time_runs(astar, problem3, heuristic1_v2))
-
-    print("\nProblem 2: Arad to Oradea")
     heuristic2_v1 = heuristic2(problem2.goal, romania_adj_list)
     print("BFS:", time_runs(bfs, problem2))
     print("DFS:", time_runs(dfs, problem2))
-    print("Greedy (triangle):", time_runs(greedy_best_first, problem2, heuristic2_v1))
-    print("A* (triangle-avg):", time_runs(astar, problem2, heuristic2_v1))
+    print("Greedy (heuristic1):", time_runs(greedy_best_first, problem2, heuristic1_v1))
+    print("A* (heuristic1):", time_runs(astar, problem2, heuristic1_v1))
+    print("Greedy (heuristic2):", time_runs(greedy_best_first, problem2, heuristic2_v1))
+    print("A* (heuristic2):", time_runs(astar, problem2, heuristic2_v1))
 
-    print("\nProblem 3: Zerind to Bucharest") 
+    print("\nProblem 3: Zerind to Pitesti") 
+    heuristic1_v2 = heuristic1(problem3.goal, romania_adj_list)
     heuristic2_v2 = heuristic2(problem3.goal, romania_adj_list)
     print("BFS:", time_runs(bfs, problem3))
     print("DFS:", time_runs(dfs, problem3))
-    print("Greedy (triangle h2):", time_runs(greedy_best_first, problem3, heuristic2_v2))
-    print("A* (triangle h2):", time_runs(astar, problem3, heuristic2_v2))
+    print("Greedy (heuristic1):", time_runs(greedy_best_first, problem3, heuristic1_v2))
+    print("A* (heuristic1):", time_runs(astar, problem3, heuristic1_v2))
+    print("Greedy (heuristic2):", time_runs(greedy_best_first, problem3, heuristic2_v2))
+    print("A* (heuristic2):", time_runs(astar, problem3, heuristic2_v2))
+    
+
 
 if __name__ == "__main__":
     main()
