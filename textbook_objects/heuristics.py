@@ -1,4 +1,5 @@
 import math
+from collections import deque
 # heuristic from textbook: straight line distances to Bucharest
 hSLD_bucharest = {
     "Arad": 366, "Bucharest": 0, "Craiova": 160, "Drobeta": 242,
@@ -56,6 +57,27 @@ def heuristic2(goal, romania_adj_list):
                 #choose the smallest estimate
             h[city] = min(estimates) if estimates else 9999 #if there are no neighbors use fallback num
     return h
+
+def heuristic2(goal, romania_adj_list):
+    # find the smallest edge in the graph
+    min_edge = min(distance for city in romania_adj_list for distance in romania_adj_list[city].values())
+    
+    # compute min numner of hops from every city to the goal
+    hop_distance = {city: float("inf") for city in romania_adj_list}
+    hop_distance[goal] = 0
+    queue = deque([goal])
+    #using BFS to compute
+    while queue:
+        city = queue.popleft()
+        for neighbor in romania_adj_list[city]:
+            if hop_distance[neighbor] == float("inf"):#if city hasn't been visited yet set the hop distance to current city+1
+                hop_distance[neighbor] = hop_distance[city] + 1
+                queue.append(neighbor)
+    
+    #hops to goal* min edge cost
+    h = {city: hop_distance[city] * min_edge for city in romania_adj_list}
+    return h
+
 
 
 
